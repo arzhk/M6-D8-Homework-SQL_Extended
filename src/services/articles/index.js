@@ -12,6 +12,15 @@ router.get("/", async (req, res, next) => {
         const response = await dbFuncs.findByContentSearch("articles", req.query.search);
         res.send(response.rows);
       }
+    } else if (req.query.data) {
+      if (req.query.data === "categorysummary") {
+        const response = await dbFuncs.getArticleCountByCategory();
+        if (response.rowCount !== 0) {
+          res.send(response.rows);
+        }
+      } else {
+        res.status(404).send("Please enter a valid data request option.");
+      }
     } else {
       const response = await dbFuncs.findAll("articles");
       res.send(response.rows);
@@ -28,14 +37,14 @@ router.get("/:id", async (req, res, next) => {
       if (response.rowCount !== 0) {
         res.send(response.rows);
       } else {
-        res.send("No article found with that ID");
+        res.status(404).send("No article found with that ID");
       }
     } else {
       const response = await dbFuncs.findById("articles", req.params.id);
       if (response.rowCount !== 0) {
         res.send(response.rows);
       } else {
-        res.send("No article found with that ID");
+        res.status(404).send("No article found with that ID");
       }
     }
   } catch (err) {

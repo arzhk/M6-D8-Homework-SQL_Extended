@@ -92,6 +92,37 @@ findByContentSearch = async (tableName, searchterm) => {
   }
 };
 
+getArticleCountByCategory = async () => {
+  try {
+    const queryString = `SELECT c.id, c.name, COUNT(a.id) AS total_articles FROM categories AS c INNER JOIN articles AS a ON a.category_id=c.id GROUP BY (c.id) ORDER BY c.id ASC`;
+    const response = await db.query(queryString);
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+getAllResponseData = async () => {
+  try {
+    const queryString = `SELECT a.id, a.headline, a.content, COUNT(CASE WHEN r.is_clap THEN 1 END) AS total_claps, COUNT(r.id) as total_responses FROM responses AS r INNER JOIN articles AS a ON r.article_id = a.id GROUP BY(a.id) ORDER BY a.id ASC`;
+    const response = await db.query(queryString);
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+getResponseDataById = async (id) => {
+  try {
+    const queryString = `SELECT a.id, a.headline, a.content, COUNT(CASE WHEN r.is_clap THEN 1 END) AS total_claps, COUNT(r.id) as total_responses FROM responses AS r INNER JOIN articles AS a ON r.article_id = a.id WHERE a.id=${id} GROUP BY(a.id)
+`;
+    const response = await db.query(queryString);
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports = {
   findAll,
   findById,
@@ -101,4 +132,7 @@ module.exports = {
   findArticleWithAuthorAndCategory,
   findByTitleSearch,
   findByContentSearch,
+  getArticleCountByCategory,
+  getAllResponseData,
+  getResponseDataById,
 };
