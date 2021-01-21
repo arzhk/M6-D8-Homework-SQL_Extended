@@ -16,6 +16,8 @@ router.get("/", async (req, res, next) => {
       if (req.query.data === "categorysummary") {
         const response = await dbFuncs.getArticleCountByCategory();
         if (response.rowCount !== 0) {
+          res.status(404).send("Data not found");
+        } else {
           res.send(response.rows);
         }
       } else {

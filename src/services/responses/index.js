@@ -1,6 +1,4 @@
 const router = require("express").Router();
-
-const e = require("express");
 const dbFuncs = require("../../utils/dbFuncs.js");
 
 router.get("/", async (req, res, next) => {
